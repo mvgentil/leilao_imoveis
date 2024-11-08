@@ -43,6 +43,6 @@ def gera_mapa(df):
     folium.LayerControl(collapsed=False).add_to(mapa)
 
     # Salva o mapa em um arquivo HTML
-    mapa.save("mapa_imoveis_leilao.html")
+    mapa.save("html/mapa_imoveis_leilao.html")
 
     print("Mapa gerado e salvo como 'mapa_imoveis_leilao.html'")

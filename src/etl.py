@@ -9,7 +9,7 @@ from geopy.extra.rate_limiter import RateLimiter
 data_geracao = None
 
 # Importa o arquivo CSV
-file_path = '../data/Lista_imoveis_SC.csv'
+file_path = 'data/Lista_imoveis_SC.csv'
 # Lê o arquivo ignorando as duas primeiras linhas e definindo a terceira como cabeçalho
 df = pd.read_csv(
     file_path,
@@ -60,10 +60,10 @@ def get_coordinates(row):
     
     try:
         # Geocodificando o endereço completo
-        location = geocode(address)
+        location_completo = geocode(address)
         
-        if location:
-            return location.latitude, location.longitude
+        if location_completo:
+            return location_completo.latitude, location_completo.longitude
         
         # Se não encontrou no endereço completo, tenta sem o número
         location_sem_num = geocode(address_sem_num)
@@ -71,11 +71,17 @@ def get_coordinates(row):
         if location_sem_num:
             return location_sem_num.latitude, location_sem_num.longitude
         
-        # Se não encontrou nem sem o número, tenta só cidade e estado
-        location_cidade_estado = geocode(f"{row['Cidade']}, {row['UF']}, Brazil")
+        address_bairro = f"{row['Bairro']}, {row['Cidade']}, {row['UF']}, Brazil"
+        location_bairro = geocode(address_bairro)
         
-        if location_cidade_estado:
-            return location_cidade_estado.latitude, location_cidade_estado.longitude
+        if location_bairro:
+            return location_bairro.latitude, location_bairro.longitude
+
+        # Se não encontrou nem sem o número, tenta só cidade e estado
+        location_cidade = geocode(f"{row['Cidade']}, {row['UF']}, Brazil")
+        
+        if location_cidade:
+            return location_cidade.latitude, location_cidade.longitude
         
         # Se não encontrou nenhuma das opções, retorna None
         return None, None
