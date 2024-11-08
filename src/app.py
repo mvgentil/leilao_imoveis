@@ -1,7 +1,27 @@
 import streamlit as st
 import pandas as pd
+import re
 import streamlit.components.v1 as components
 from datetime import datetime
+from map import gera_mapa
+
+file_path_coord = 'data/lista_imoveis_sc_coordenadas.csv'
+file_path = 'data/Lista_imoveis_SC.csv'
+def get_data_geracao(file_path):
+    data_geracao = None  # Valor padrão caso não encontre a data
+
+    with open(file_path, 'r', encoding='latin1') as file:
+        for line in file:
+            date_match = re.search(r'\d{2}/\d{2}/\d{4}', line)
+            if date_match:
+                data_geracao = datetime.strptime(date_match.group(), "%d/%m/%Y").strftime("%d/%m/%Y")
+                break  # Interrompe a leitura ao encontrar a data
+
+    if data_geracao is None:
+        raise ValueError("Data de geração não encontrada no arquivo.")
+    
+    return data_geracao
+
 
 # Função para exibir o mapa
 def exibir_mapa():
@@ -10,15 +30,22 @@ def exibir_mapa():
     components.html(source_code, height=600)
 
 # Obter a data e hora atual e formatá-la
-data_formatada = datetime.now().strftime("%d/%m/%Y")
+data_geracao = get_data_geracao(file_path)
+
 
 # Título do aplicativo
-st.set_page_config(page_title="Leilão de Imóveis", layout="wide")  # Definir título da página e layout
+st.set_page_config(page_title="Leilão de Imóveis",
+                    page_icon=":house:",
+                    initial_sidebar_state="auto",
+                    menu_items={
+                        'Get Help': 'https://www.caixa.gov.br/voce/habitacao/imoveis-venda/Paginas/default.aspx',
+                        'About': "Leilão de Imóveis da Caixa Econômica Federal"
+                    },
+                    layout="wide")  # Definir título da página e layout
 
 
 # Barra lateral para navegação
 st.sidebar.header("Menu de Navegação")
-st.sidebar.write("Escolha uma das opções abaixo:")
 opcao = st.sidebar.radio("Selecione", ("Mapa de Imóveis", "Informações Gerais",
                                         "Lista de Imóveis Salvos", "Análise de viabilidade econômica")) 
 
@@ -26,7 +53,8 @@ if opcao == "Mapa de Imóveis":
     # Se o usuário escolher "Mapa de Imóveis", exibe o mapa
     st.header("Mapa de Imóveis Disponíveis")
     # Mostrar data atual com título de destaque
-    st.markdown(f"**Atualizado em {data_formatada}**")
+    if data_geracao is not None:
+        st.markdown(f"**Atualizado em {data_geracao}**")
     st.write("""
         Filtre os imóveis pela modalidade de venda clicando nos filtros na parte superior do mapa.
     """)
@@ -42,20 +70,10 @@ elif opcao == "Informações Gerais":
     """)
 elif opcao == "Lista de Imóveis Salvos":
     # Se o usuário escolher "Lista de Imóveis Salvos", exibe uma tabela com os imóveis salvos
-    st.header("Lista de Imóveis Salvos")
-    # Mostrar data atual com título de destaque
-    st.markdown(f"**Atualizado em {data_formatada}**")
-    # Importa o arquivo CSV
-    file_path = 'data/Lista_imoveis_SC.csv'
-    # Lê o arquivo ignorando as duas primeiras linhas e definindo a terceira como cabeçalho
-    df = pd.read_csv(
-        file_path,
-        sep=';',               # Especifica o delimitador de campo
-        encoding='latin1',     # Define a codificação para evitar erros de caracteres especiais
-        skiprows=2,            # Pula as duas primeiras linhas
-    )
-    st.write(df)
-    st.write("Para salvar um imovel, clique no botão 'Salvar' na tabela.")
+    st.subheader("Lista de Imóveis Salvos")
+    st.write("""
+        Em breve...
+    """)
 
 elif opcao == "Análise de viabilidade econômica":
     # Se o usuário escolher "Análise de viabilidade", pode adicionar mais detalhes ou outros conteúdos

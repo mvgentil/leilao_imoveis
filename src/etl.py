@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 import time
+from datetime import datetime
 
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
@@ -17,16 +18,6 @@ df = pd.read_csv(
     encoding='latin1',     # Define a codificação para evitar erros de caracteres especiais
     skiprows=2,            # Pula as duas primeiras linhas
 )
-
-# Lê o arquivo linha por linha até encontrar a data de geração
-with open(file_path, 'r', encoding='latin1') as file:
-    for line in file:
-        # Usa uma expressão regular para encontrar a data no formato dd/mm/yyyy
-        date_match = re.search(r'\d{2}/\d{2}/\d{4}', line)
-        if date_match:
-            data_geracao = date_match.group()
-            break  # Interrompe a leitura ao encontrar a data
-
 
 # Função para extrair rua e número
 def extract_street_and_number(address):

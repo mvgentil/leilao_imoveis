@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_a803b115541bde05fab706d1f7876fd7 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+<script>
+    function saveProperty(imovelId) {
+        fetch('/save_property', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: imovelId }),
+        }).then(response => {
+            if (response.ok) {
+                alert('Imóvel salvo com sucesso!');
+            } else {
+                alert('Erro ao salvar imóvel.');
+            }
+        });
+    }
+</script>
+    
+            <div class="folium-map" id="map_a803b115541bde05fab706d1f7876fd7" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_a803b115541bde05fab706d1f7876fd7 = L.map(
+                "map_a803b115541bde05fab706d1f7876fd7",
+                {
+                    center: [-23.5505, -46.6333],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_d230acaf31af22404cc6c1934e75ea03 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_d230acaf31af22404cc6c1934e75ea03.addTo(map_a803b115541bde05fab706d1f7876fd7);
+        
+    
+            var marker_b801688e0b32437fd760d46dea74fded = L.marker(
+                [-23.5505, -46.6333],
+                {}
+            ).addTo(map_a803b115541bde05fab706d1f7876fd7);
+        
+    
+        var popup_725ebbe499c4941d62046f845b5afda7 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_2b50836f815f7d913791877aefcf8949 = $(`<div id="html_2b50836f815f7d913791877aefcf8949" style="width: 100.0%; height: 100.0%;">         <strong>Descrição do Imóvel 1</strong><br>         <button onclick="saveProperty(1)">Salvar Imóvel</button>     </div>`)[0];
+                popup_725ebbe499c4941d62046f845b5afda7.setContent(html_2b50836f815f7d913791877aefcf8949);
+            
+        
+
+        marker_b801688e0b32437fd760d46dea74fded.bindPopup(popup_725ebbe499c4941d62046f845b5afda7)
+        ;
+
+        
+    
+    
+            var marker_5daf7a4c99b79a43ca9dc4363a808ecb = L.marker(
+                [-23.540499999999998, -46.6233],
+                {}
+            ).addTo(map_a803b115541bde05fab706d1f7876fd7);
+        
+    
+        var popup_e0d8baad191e5b22dc53ad02b6390f1d = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_a1b07f0362197f0c8652ebe05803c192 = $(`<div id="html_a1b07f0362197f0c8652ebe05803c192" style="width: 100.0%; height: 100.0%;">         <strong>Descrição do Imóvel 2</strong><br>         <button onclick="saveProperty(2)">Salvar Imóvel</button>     </div>`)[0];
+                popup_e0d8baad191e5b22dc53ad02b6390f1d.setContent(html_a1b07f0362197f0c8652ebe05803c192);
+            
+        
+
+        marker_5daf7a4c99b79a43ca9dc4363a808ecb.bindPopup(popup_e0d8baad191e5b22dc53ad02b6390f1d)
+        ;
+
+        
+    
+    
+            var marker_a3bd5e57f7c722d64f9181746556968c = L.marker(
+                [-23.5305, -46.613299999999995],
+                {}
+            ).addTo(map_a803b115541bde05fab706d1f7876fd7);
+        
+    
+        var popup_2502f89626fc63de434ff1a536e4cae3 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_5c2de318a55a10b207809d703fca2e33 = $(`<div id="html_5c2de318a55a10b207809d703fca2e33" style="width: 100.0%; height: 100.0%;">         <strong>Descrição do Imóvel 3</strong><br>         <button onclick="saveProperty(3)">Salvar Imóvel</button>     </div>`)[0];
+                popup_2502f89626fc63de434ff1a536e4cae3.setContent(html_5c2de318a55a10b207809d703fca2e33);
+            
+        
+
+        marker_a3bd5e57f7c722d64f9181746556968c.bindPopup(popup_2502f89626fc63de434ff1a536e4cae3)
+        ;
+
+        
+    
+</script>
+</html>
