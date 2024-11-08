@@ -50,46 +50,46 @@ df_coord = df
 # Função para geocodificar com RateLimiter
 def get_coordinates(row):
     # Concatena as colunas para formar o endereço completo
-    address = f"{row['Rua']},{row['Número']}, {row['Bairro']}, {row['Cidade']}, {row['UF']}, Brazil"
+    address_completo = f"{row['Rua']},{row['Número']}, {row['Bairro']}, {row['Cidade']}, {row['UF']}, Brazil"
     address_sem_num = f"{row['Rua']}, {row['Bairro']}, {row['Cidade']}, {row['UF']}, Brazil"
+    address_bairro = f"{row['Bairro']}, {row['Cidade']}, {row['UF']}, Brazil"
+    address_cidade = f"{row['Cidade']}, {row['UF']}, Brazil"
+    
     # Instancia o geolocalizador
     geolocator = Nominatim(user_agent="geolocator")
-    
-    # Usando o RateLimiter para evitar atingir o limite de requisições
     geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)  # Delay de 1 segundo
-    
-    try:
-        # Geocodificando o endereço completo
-        location_completo = geocode(address)
-        
-        if location_completo:
-            return location_completo.latitude, location_completo.longitude
-        
-        # Se não encontrou no endereço completo, tenta sem o número
-        location_sem_num = geocode(address_sem_num)
-        
-        if location_sem_num:
-            return location_sem_num.latitude, location_sem_num.longitude
-        
-        address_bairro = f"{row['Bairro']}, {row['Cidade']}, {row['UF']}, Brazil"
-        location_bairro = geocode(address_bairro)
-        
-        if location_bairro:
-            return location_bairro.latitude, location_bairro.longitude
 
-        # Se não encontrou nem sem o número, tenta só cidade e estado
-        location_cidade = geocode(f"{row['Cidade']}, {row['UF']}, Brazil")
-        
-        if location_cidade:
-            return location_cidade.latitude, location_cidade.longitude
-        
-        # Se não encontrou nenhuma das opções, retorna None
-        return None, None
+    # Função auxiliar para tentar geocodificar com tratamento de timeout
+    def try_geocode(address):
+        try:
+            location = geocode(address)
+            return location.latitude, location.longitude if location else (None, None)
+        except GeocoderTimedOut:
+            print(f"Timeout para o endereço: {address}")
+            return None, None
 
-    except GeocoderTimedOut:
-        # Caso de timeout, retorna None
-        print(f"Timeout para o endereço: {address}")
-        return None, None
+    # Tenta geocodificar o endereço completo
+    latitude, longitude = try_geocode(address_completo)
+    if latitude and longitude:
+        return latitude, longitude
+
+    # Tenta geocodificar o endereço sem número
+    latitude, longitude = try_geocode(address_sem_num)
+    if latitude and longitude:
+        return latitude, longitude
+
+    # Tenta geocodificar o bairro
+    latitude, longitude = try_geocode(address_bairro)
+    if latitude and longitude:
+        return latitude, longitude
+
+    # Tenta geocodificar a cidade
+    latitude, longitude = try_geocode(address_cidade)
+    if latitude and longitude:
+        return latitude, longitude
+
+    # Se nenhuma tentativa teve sucesso, retorna None
+    return None, None
 
 
 # Criar uma lista para armazenar as coordenadas
